@@ -9,11 +9,16 @@ If Python and Arcade are installed, this example can be run from the command lin
 python -m arcade.examples.starting_template
 """
 import arcade
+import numpy as np
+from player import *
+from map import *
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1920         # / 40 = 48
+SCREEN_HEIGHT = 1080        # / 40 = 27
+TILE_SIZE = 40
+PLAYER_WIDTH = 40
+PLAYER_HEIGHT = 40
 SCREEN_TITLE = "Starting Template"
-
 
 class MyGame(arcade.Window):
     """
@@ -28,14 +33,19 @@ class MyGame(arcade.Window):
         super().__init__(width, height, title)
 
         arcade.set_background_color(arcade.color.AMAZON)
-
         joysticks = arcade.get_joysticks()
+        self.player_count = len(joysticks)
+        self.tile_size = TILE_SIZE
+        self.map = Map(self, "")
+        self.players = []
         if joysticks:
-            self.joystick = joysticks[0]
-            self.joystick.open()
-            self.joystick.on_joybutton_press = self.on_joybutton_press
-            self.joystick.on_joybutton_release = self.on_joybutton_release
-            self.joystick.on_joyhat_motion = self.on_joyhat_motion
+            for i in range(len(joysticks)):
+                player = Player(self, i)
+                joysticks[i].open()
+                joysticks[i].on_joybutton_press = player.on_joybutton_press
+                joysticks[i].on_joybutton_release = player.on_joybutton_release
+                joysticks[i].on_joyaxis_motion = player.on_joyaxis_motion
+                self.players.append(player)
         else:
             print("There are no Joysticks")
             self.joystick = None
@@ -55,6 +65,8 @@ class MyGame(arcade.Window):
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
 
+        for player in self.players:
+            player.draw()
         # Call draw() on all your sprite lists below
 
     def on_update(self, delta_time):
@@ -63,6 +75,7 @@ class MyGame(arcade.Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
+        self.players[0].x += 0.1
         pass
 
     def on_key_press(self, key, key_modifiers):
@@ -99,18 +112,6 @@ class MyGame(arcade.Window):
         Called when a user releases a mouse button.
         """
         pass
-
-    # noinspection PyMethodMayBeStatic
-    def on_joybutton_press(self, _joystick, button):
-        print("Button {} down".format(button))
-
-    # noinspection PyMethodMayBeStatic
-    def on_joybutton_release(self, _joystick, button):
-        print("Button {} up".format(button))
-
-    # noinspection PyMethodMayBeStatic
-    def on_joyhat_motion(self, _joystick, hat_x, hat_y):
-        print("Hat ({}, {})".format(hat_x, hat_y))
 
 def main():
     """ Main method """
