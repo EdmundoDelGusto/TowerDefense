@@ -54,6 +54,7 @@ class MyGame(arcade.Window):
 
     def setup(self):
         # Create your sprites and sprite lists here
+        #
         pass
 
     def on_draw(self):
