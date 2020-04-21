@@ -29,6 +29,16 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.color.AMAZON)
 
+        joysticks = arcade.get_joysticks()
+        if joysticks:
+            self.joystick = joysticks[0]
+            self.joystick.open()
+            self.joystick.on_joybutton_press = self.on_joybutton_press
+            self.joystick.on_joybutton_release = self.on_joybutton_release
+            self.joystick.on_joyhat_motion = self.on_joyhat_motion
+        else:
+            print("There are no Joysticks")
+            self.joystick = None
         # If you have sprite lists, you should create them here,
         # and set them to None
 
@@ -56,6 +66,7 @@ class MyGame(arcade.Window):
         pass
 
     def on_key_press(self, key, key_modifiers):
+        print(key)
         """
         Called whenever a key on the keyboard is pressed.
 
@@ -77,6 +88,7 @@ class MyGame(arcade.Window):
         pass
 
     def on_mouse_press(self, x, y, button, key_modifiers):
+        print(x, y, button, key_modifiers)
         """
         Called when the user presses a mouse button.
         """
@@ -88,6 +100,17 @@ class MyGame(arcade.Window):
         """
         pass
 
+    # noinspection PyMethodMayBeStatic
+    def on_joybutton_press(self, _joystick, button):
+        print("Button {} down".format(button))
+
+    # noinspection PyMethodMayBeStatic
+    def on_joybutton_release(self, _joystick, button):
+        print("Button {} up".format(button))
+
+    # noinspection PyMethodMayBeStatic
+    def on_joyhat_motion(self, _joystick, hat_x, hat_y):
+        print("Hat ({}, {})".format(hat_x, hat_y))
 
 def main():
     """ Main method """
