@@ -53,7 +53,7 @@ class MyGame(arcade.Window):
         # and set them to None
 
     def setup(self):
-        # Create your sprites and sprite lists here
+        # Create your sprites and sprite lists herea
         #
         pass
 
