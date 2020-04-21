@@ -13,8 +13,8 @@ import numpy as np
 from player import *
 from map import *
 
-SCREEN_WIDTH = 1920         # / 40 = 48
-SCREEN_HEIGHT = 1080        # / 40 = 27
+SCREEN_WIDTH = 1840         # / 40 = 48
+SCREEN_HEIGHT = 1000        # / 40 = 27
 TILE_SIZE = 40
 PLAYER_WIDTH = 40
 PLAYER_HEIGHT = 40
@@ -66,6 +66,7 @@ class MyGame(arcade.Window):
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
 
+        self.map.draw()
         for player in self.players:
             player.draw()
         # Call draw() on all your sprite lists below
