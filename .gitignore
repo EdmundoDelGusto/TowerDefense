@@ -129,5 +129,3 @@ dmypy.json
 .pyre/
 #pycharm
 .idea
-#test
-a
