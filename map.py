@@ -12,9 +12,8 @@ class Map:
         lines = file.readlines()
         self.map = np.zeros((self.rows, self.cols, 2))
         for row in range(len(lines)):
-            for col in range(len(lines[row])):
-                if col != len(lines[row]) -1:
-                    self.map[row][col][0] = int(lines[row][col])
+            for col in range(len(lines[row])-1): # ignore  \n
+                self.map[row][col][0] = int(lines[row][col])
 
     def setup(self):
         self.map_sprites = arcade.SpriteList()
@@ -53,18 +52,6 @@ class Map:
         if self.in_map_boundaries(row, col):
             return self.map[row][col][0] == 2
         return False
-
-    def get_rectangle_points(self, row, col):
-        x = col * self.game.tile_size + self.game.tile_size / 2
-        y = row * self.game.tile_size + self.game.tile_size / 2
-        half_square_size = self.game.tile_size / 2
-
-        top_left = (x - half_square_size, y + half_square_size)
-        top_right = (x + half_square_size, y + half_square_size)
-        bottom_right = (x + half_square_size, y - half_square_size)
-        bottom_left = (x - half_square_size, y - half_square_size)
-
-        return (top_left, top_right, bottom_right, bottom_left)
 
     def get_row(self, y):
         if y > self.game.height:
