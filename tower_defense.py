@@ -83,7 +83,10 @@ class MyGame(arcade.Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        pass
+
+        for player in self.players:
+            player.update(delta_time)
+
 
     def on_key_press(self, key, key_modifiers):
         print(key)
