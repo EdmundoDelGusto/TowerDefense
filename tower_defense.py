@@ -71,9 +71,10 @@ class MyGame(arcade.Window):
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
 
-        #self.map.draw()
+        self.map.draw()
         for player in self.players:
             player.draw()
+
         # Call draw() on all your sprite lists below
 
     def on_update(self, delta_time):

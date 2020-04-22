@@ -17,37 +17,25 @@ class Map:
                     self.map[row][col][0] = int(lines[row][col])
 
     def setup(self):
-        self.dirt_list = arcade.SpriteList()
-        self.stone_list = arcade.SpriteList()
-        self.water_list = arcade.SpriteList()
-        self.way_list = arcade.SpriteList()
+        self.map_sprites = arcade.SpriteList()
 
         for row in range(len(self.map)):
             for col in range(len(self.map[row])):
                 x = col * self.game.tile_size + self.game.tile_size / 2
                 y = row * self.game.tile_size + self.game.tile_size / 2
                 if self.is_buildable(row, col):
-                    dirt = arcade.Sprite("resources/images/tiles/dirt_center.png", self.tile_scaling_factor)
-                    dirt.center_x = x
-                    dirt.center_y = y
-                    self.dirt_list.append(dirt)
+                    sprite = arcade.Sprite("resources/images/tiles/dirt_center.png", self.tile_scaling_factor)
                 elif self.is_way(row, col):
-                    way = arcade.Sprite("resources/images/tiles/stone_center.png", self.tile_scaling_factor)
-                    way.center_x = x
-                    way.center_y = y
-                    self.way_list.append(way)
+                    sprite = arcade.Sprite("resources/images/tiles/stone_center.png", self.tile_scaling_factor)
                 elif self.is_obstacle(row, col):
-                    way = arcade.Sprite("resources/images/tiles/water.png", self.tile_scaling_factor)
-                    way.center_x = x
-                    way.center_y = y
-                    self.water_list.append(way)
+                    sprite = arcade.Sprite("resources/images/tiles/water.png", self.tile_scaling_factor)
+                sprite.center_x = x
+                sprite.center_y = y
+                self.map_sprites.append(sprite)
 
 
     def draw(self):
-        self.dirt_list.draw()
-        self.stone_list.draw()
-        self.water_list.draw()
-        self.way_list.draw()
+        self.map_sprites.draw()
 
     def in_map_boundaries(self, row, col):
         return row >= 0 and row < self.rows and col >= 0 and col < self.cols
@@ -77,7 +65,7 @@ class Map:
         bottom_left = (x - half_square_size, y - half_square_size)
 
         return (top_left, top_right, bottom_right, bottom_left)
-    
+
     def get_row(self, y):
         if y > self.game.height:
             raise ValueError("y out of bounds")
