@@ -12,13 +12,15 @@ import arcade
 import numpy as np
 from player import *
 from map import *
+import time
 
-SCREEN_WIDTH = 1840         # / 40 = 48
-SCREEN_HEIGHT = 1000        # / 40 = 27
+SCREEN_WIDTH = 1840         # / 40 = 46
+SCREEN_HEIGHT = 1000        # / 40 = 25
 TILE_SIZE = 40
 PLAYER_WIDTH = 40
 PLAYER_HEIGHT = 40
 SCREEN_TITLE = "Starting Template"
+FPS = 60
 
 class MyGame(arcade.Window):
     """
@@ -34,9 +36,10 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.color.AMAZON)
         joysticks = arcade.get_joysticks()
+        self.set_update_rate(1 / FPS)
         self.player_count = len(joysticks)
         self.tile_size = TILE_SIZE
-        self.map = Map(self, "")
+        self.map = Map(self, "level1.lvl")
         self.players = []
         if joysticks:
             for i in range(len(joysticks)):
@@ -53,6 +56,7 @@ class MyGame(arcade.Window):
         # and set them to None
 
     def setup(self):
+        self.map.setup()
         # Create your sprites and sprite lists herea
         #
         pass
@@ -77,8 +81,6 @@ class MyGame(arcade.Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        self.players[0].x += 0.1
-        pass
 
     def on_key_press(self, key, key_modifiers):
         print(key)
