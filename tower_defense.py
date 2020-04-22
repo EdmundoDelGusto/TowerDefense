@@ -12,7 +12,8 @@ import arcade
 import numpy as np
 from player import *
 from map import *
-
+import time
+FPS = 24
 SCREEN_WIDTH = 1840         # / 40 = 48
 SCREEN_HEIGHT = 1000        # / 40 = 27
 TILE_SIZE = 40
@@ -66,7 +67,7 @@ class MyGame(arcade.Window):
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
 
-        self.map.draw()
+        #self.map.draw()
         for player in self.players:
             player.draw()
         # Call draw() on all your sprite lists below
@@ -77,7 +78,8 @@ class MyGame(arcade.Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        self.players[0].x += 0.1
+
+
         pass
 
     def on_key_press(self, key, key_modifiers):

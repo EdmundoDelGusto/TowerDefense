@@ -41,3 +41,13 @@ class Map:
         if self.in_map_boundaries(row, col):
             return self.map[row][col][0] == 2
         return False
+
+    def get_row(self, y):
+        if y > self.game.height:
+            raise ValueError("y out of bounds")
+        return int(y/40)
+
+    def get_col(self, x):
+        if x > self.game.width:
+            raise ValueError("x out of bounds")
+        return int(x/40)
