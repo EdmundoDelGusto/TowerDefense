@@ -77,3 +77,13 @@ class Map:
         bottom_left = (x - half_square_size, y - half_square_size)
 
         return (top_left, top_right, bottom_right, bottom_left)
+    
+    def get_row(self, y):
+        if y > self.game.height:
+            raise ValueError("y out of bounds")
+        return int(y/40)
+
+    def get_col(self, x):
+        if x > self.game.width:
+            raise ValueError("x out of bounds")
+        return int(x/40)
