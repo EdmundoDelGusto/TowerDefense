@@ -12,6 +12,7 @@ import arcade
 import numpy as np
 from player import *
 from map import *
+from game_object import *
 import time
 
 FPS = 24
@@ -42,6 +43,18 @@ class MyGame(arcade.Window):
         self.tile_size = TILE_SIZE
         self.map = Map(self, "level1.lvl")
         self.players = []
+        self.game_objects = []
+        self.game_objects.append(
+            GameObject(
+                self, 500, 500,
+                [
+                    "resources/images/items/flagGreen1.png",
+                    "resources/images/items/flagGreen2.png",
+                ]
+            )
+        )
+        self.game_objects[0].face_direction = GameObject.FACING_LEFT
+
         if joysticks:
             for i in range(len(joysticks)):
                 player = Player(self, i)
@@ -72,6 +85,10 @@ class MyGame(arcade.Window):
         arcade.start_render()
 
         self.map.draw()
+
+        for game_object in self.game_objects:
+            game_object.draw()
+
         for player in self.players:
             player.draw()
 
@@ -83,10 +100,11 @@ class MyGame(arcade.Window):
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-
         for player in self.players:
             player.update(delta_time)
 
+        for game_object in self.game_objects:
+            game_object.update_animation(delta_time)
 
     def on_key_press(self, key, key_modifiers):
         print(key)

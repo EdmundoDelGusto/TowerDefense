@@ -7,6 +7,7 @@ class Map:
         self.cols = int(self.game.width / self.game.tile_size)
 
         self.tile_scaling_factor = self.game.tile_size / 128
+
         # row, col, (tile_type, tile_skin)
         file = open(file)
         lines = file.readlines()
