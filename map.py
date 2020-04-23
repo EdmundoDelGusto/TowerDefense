@@ -57,9 +57,23 @@ class Map:
     def get_row(self, y):
         if y > self.game.height:
             raise ValueError("y out of bounds")
-        return int(y/40)
+        return y // self.game.tile_size
 
     def get_col(self, x):
         if x > self.game.width:
             raise ValueError("x out of bounds")
-        return int(x/40)
+        return x // self.game.tile_size
+
+    def get_position(self, col, row):
+        """
+            returns (x, y) tuple of tile center
+
+            NOTE: Use *my_sprite_class*.center_x, *my_sprite_class*.center_y if possible
+        """
+        if col > self.cols - 1:
+            raise ValueError("col out of bounds")
+        if row > self.rows - 1:
+            raise ValueError("row out of bounds")
+        x = col * self.game.tile_size + self.game.tile_size // 2
+        y = row * self.game.tile_size + self.game.tile_size // 2
+        return x, y
