@@ -55,12 +55,12 @@ class Map:
         return False
 
     def get_row(self, y):
-        if y > self.game.height:
+        if y > self.game.height or y < 0:
             raise ValueError("y out of bounds")
         return y // self.game.tile_size
 
     def get_col(self, x):
-        if x > self.game.width:
+        if x > self.game.width or x< 0:
             raise ValueError("x out of bounds")
         return x // self.game.tile_size
 

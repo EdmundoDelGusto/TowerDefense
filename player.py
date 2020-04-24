@@ -1,107 +1,110 @@
 import arcade
 from map import *
-import datetime
-from datetime import timedelta
+from tower_defense import*
 
+LEFT = -1.0
+RIGHT = 1.0
+DOWN = 1.0
+UP = -1.0
+MOVEMENT_SPEED = 40
 
-class Player:
+class Player(arcade.Sprite):
 
-    def __init__(self, game, player_nr):
+    def __init__(self, game, player_nr, textures):
+        super().__init__()
+
+        self.up_pressed = False
+        self.down_pressed = False
+        self.right_pressed = False
+        self.left_pressed = False
         self.game = game
         self.player_nr = player_nr
-        self.x_movement = None
-        self.y_movement = None
-        self.movement_timer = datetime.datetime.now()
-        self.movement_delay = timedelta(milliseconds=500)
-        self.movement_delta = timedelta(milliseconds=450)
-        self.x = (self.game.width / self.game.player_count) * player_nr + (self.game.width / (2 * self.game.player_count))
-        self.y = self.game.height/2
-        self.pos = (int(self.y / 40), int(self.x / 40))
-        self.colors = [
-            arcade.color.RED,
-            arcade.color.BLUE,
-            arcade.color.YELLOW,
-            arcade.color.PURPLE,
-        ]
+        self.center_x = 300
+        self.center_y = 300
+        self.change_x = 0
+        self.center_y = 0
+        self.textures = []
+        for texture in textures:
+            self.textures.append(arcade.load_texture(texture))
+        self.texture = self.textures[0]
+        self.scale = self.game.get_scale(self.texture)
+        self.framecount = 0
+        self.movement_action = False
+        self.diagonal = 1
 
-    def update(self, delta_time):
-        now = datetime.datetime.now()
-        if now - self.movement_timer > self.movement_delay:
-            if self.x_movement is not None:
-                if self.x_movement is 'right':
-                    self.move_right()
-                if self.x_movement is 'left':
-                    self.move_left()
 
-            if self.y_movement is not None:
-                if self.y_movement is 'up':
-                    self.move_up()
-                if self.y_movement is 'down':
-                    self.move_down()
-            self.movement_timer = now - self.movement_delta
-
-    def update_coordinates(self):
-        self.x = 20 + self.pos[1] * 40
-        self.y = 20 + self.pos[0] * 40
-
-    def on_joybutton_press(self, _joystick, button):
-        print('on_joybutton_press')
-        print(self.player_nr, button)
-
-    def on_joybutton_release(self, _joystick, button):
-        print('on_joybutton_release')
-        print("Button {} up".format(button))
-
-    def on_joyaxis_motion(self, _joystick, axis, value):
-        print("Cross ({}, {})".format(axis, value), self.player_nr)
-        if self.x_movement is None and self.y_movement is None and int(value) != 0:
-            self.movement_timer = datetime.datetime.now()
-
+    def on_joyaxis_motion(self, joystick, axis, value):
+        print("Cross ({}, {})".format(axis, value))
         if axis == 'x':
-            if value == 1.0:
-                self.x_movement = 'right'
-                #self.movement_timer = datetime.datetime.now()
-                self.move_right()
-            elif value == -1.0:
-                self.x_movement = 'left'
-                #self.movement_timer = datetime.datetime.now()
-                self.move_left()
+            if value == RIGHT:
+                self.right_pressed = True
+                if not self.up_pressed and not self.down_pressed:
+                    self.movement_action = True
+            elif value == LEFT:
+                self.left_pressed = True
+                if not self.up_pressed and not self.down_pressed:
+                    self.movement_action = True
             else:
-                self.x_movement = None
+                self.right_pressed = False
+                self.left_pressed = False
+                self.change_x = 0
+                if not self.up_pressed and not self.down_pressed:
+                    self.framecount = 0
         elif axis == 'y':
-            if value == 1.0:
-                self.y_movement = 'down'
-                #self.movement_timer = datetime.datetime.now()
-                self.move_down()
-            elif value == -1.0:
-                self.y_movement = 'up'
-                #self.movement_timer = datetime.datetime.now()
-                self.move_up()
+            if value == RIGHT:
+                self.down_pressed = True
+                if not self.right_pressed and not self.left_pressed:
+                    self.movement_action = True
+            elif value == LEFT:
+                self.up_pressed = True
+                if not self.right_pressed and not self.left_pressed:
+                    self.movement_action = True
             else:
-                self.y_movement = None
+                self.down_pressed = False
+                self.up_pressed = False
+                self.change_y = 0
+                if not self.right_pressed and not self.left_pressed:
+                    self.framecount = 0
 
+    def movement(self):
+        if self.right_pressed and not self.left_pressed:
+            self.change_x = MOVEMENT_SPEED
+        if self.left_pressed and not self.right_pressed:
+            self.change_x = -MOVEMENT_SPEED
+        if self.up_pressed and not self.down_pressed:
+            self.change_y = MOVEMENT_SPEED
+        if self.down_pressed and not self.up_pressed:
+            self.change_y = -MOVEMENT_SPEED
+        if (self.right_pressed or self.left_pressed) and (self.up_pressed or self.down_pressed):
+            self.diagonal = 1.5
+        else:
+            self.diagonal = 1
 
-    def move_right(self):
-        if self.game.map.in_map_boundaries(self.pos[0], self.pos[1] + 1):
-            self.pos = (self.pos[0], self.pos[1] + 1)
-            self.update_coordinates()
+    def update(self):
+        self.movement()
+        if self.movement_action:
+            self.center_x += self.change_x
+            self.center_y += self.change_y
+            self.movement_action = False
+            self.framecount = 0
 
-    def move_left(self):
-        if self.game.map.in_map_boundaries(self.pos[0], self.pos[1] - 1):
-            self.pos = (self.pos[0], self.pos[1] + -1)
-            self.update_coordinates()
+        if self.framecount >= 30:
+            self.center_x += self.change_x
+            self.center_y += self.change_y
+            self.framecount -= 2 * self.diagonal
 
-    def move_up(self):
-        if self.game.map.in_map_boundaries(self.pos[0] + 1, self.pos[1]):
-            self.pos = (self.pos[0] + 1, self.pos[1])
-            self.update_coordinates()
+        if self.left < 0:
+            self.left = 0
+        elif self.right > SCREEN_WIDTH - 1:
+            self.right = SCREEN_WIDTH - 1
 
-    def move_down(self):
-        if self.game.map.in_map_boundaries(self.pos[0] - 1, self.pos[1]):
-            self.pos = (self.pos[0] - 1, self.pos[1])
-            self.update_coordinates()
+        if self.bottom < 0:
+            self.bottom = 0
+        elif self.top > SCREEN_HEIGHT - 1:
+            self.top = SCREEN_HEIGHT - 1
 
-    def draw(self):
-        arcade.draw_rectangle_outline(self.x, self.y,
-                                     self.game.tile_size, self.game.tile_size,
-                                     self.colors[self.player_nr])
+        self.center_x, self.center_y = self.game.map.get_position(
+                                                self.game.map.get_col(self.center_x),
+                                                self.game.map.get_row(self.center_y)
+                                                )
+        self.framecount += 1

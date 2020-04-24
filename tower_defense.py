@@ -15,14 +15,10 @@ from map import *
 from game_object import *
 import time
 
-FPS = 24
 SCREEN_WIDTH = 1840         # / 40 = 48
 SCREEN_HEIGHT = 1000        # / 40 = 27
 TILE_SIZE = 40
-PLAYER_WIDTH = 40
-PLAYER_HEIGHT = 40
-SCREEN_TITLE = "Starting Template"
-FPS = 60
+SCREEN_TITLE = "Tower Defense"
 
 class MyGame(arcade.Window):
     """
@@ -32,18 +28,24 @@ class MyGame(arcade.Window):
     If you do need a method, delete the 'pass' and replace it
     with your own code. Don't leave 'pass' in this program.
     """
+    FPS = 24
 
+    PLAYER_WIDTH = 40
+    PLAYER_HEIGHT = 40
+    FPS = 60
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
 
         arcade.set_background_color(arcade.color.AMAZON)
         joysticks = arcade.get_joysticks()
-        self.set_update_rate(1 / FPS)
+        self.set_update_rate(1 / self.FPS)
         self.player_count = len(joysticks)
+        self.players = arcade.SpriteList()
         self.tile_size = TILE_SIZE
         self.map = Map(self, "level1.lvl")
-        self.players = []
-        self.game_objects = []
+
+
+        self.game_objects = arcade.SpriteList()
         self.game_objects.append(
             GameObject(
                 self, 500, 500,
@@ -57,12 +59,16 @@ class MyGame(arcade.Window):
 
         if joysticks:
             for i in range(len(joysticks)):
-                player = Player(self, i)
+                player_imgs = [
+                                    "resources/tutorial/images/alien/alienBlue_front.png",
+                                    "resources/tutorial/images/alien/alienBlue_jump.png"
+                            ]
+                player_sprite = Player(self, i, player_imgs)
                 joysticks[i].open()
-                joysticks[i].on_joybutton_press = player.on_joybutton_press
-                joysticks[i].on_joybutton_release = player.on_joybutton_release
-                joysticks[i].on_joyaxis_motion = player.on_joyaxis_motion
-                self.players.append(player)
+                #joysticks[i].on_joybutton_press = player_sprite.on_joybutton_press
+                #joysticks[i].on_joybutton_release = player_sprite.on_joybutton_release
+                joysticks[i].on_joyaxis_motion = player_sprite.on_joyaxis_motion
+                self.players.append(player_sprite)
         else:
             print("There are no Joysticks")
             self.joystick = None
@@ -71,8 +77,7 @@ class MyGame(arcade.Window):
 
     def setup(self):
         self.map.setup()
-        # Create your sprites and sprite lists herea
-        #
+        # Create your sprites and sprite lists here
         pass
 
     def on_draw(self):
@@ -86,12 +91,9 @@ class MyGame(arcade.Window):
 
         self.map.draw()
 
-        for game_object in self.game_objects:
-            game_object.draw()
+        self.game_objects.draw()
 
-        for player in self.players:
-            player.draw()
-
+        self.players.draw()
         # Call draw() on all your sprite lists below
 
     def on_update(self, delta_time):
@@ -101,7 +103,7 @@ class MyGame(arcade.Window):
         need it.
         """
         for player in self.players:
-            player.update(delta_time)
+            player.update()
 
         for game_object in self.game_objects:
             game_object.update_animation(delta_time)
@@ -140,6 +142,11 @@ class MyGame(arcade.Window):
         Called when a user releases a mouse button.
         """
         pass
+
+    def get_scale(self, texture):
+        assert isinstance(texture, arcade.Texture), "wrong type"
+        max_dim = max(texture.width, texture.height)
+        return self.tile_size/max_dim
 
 def main():
     """ Main method """
