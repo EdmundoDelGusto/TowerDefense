@@ -12,7 +12,9 @@ import arcade
 import numpy as np
 from player import *
 from map import *
+from tower import *
 from game_object import *
+
 import time
 
 SCREEN_WIDTH = 1840         # / 40 = 48
@@ -45,7 +47,9 @@ class MyGame(arcade.Window):
         self.map = Map(self, "level1.lvl")
 
 
-        self.game_objects = arcade.SpriteList()
+        self.towers = arcade.SpriteList()
+
+        """
         self.game_objects.append(
             GameObject(
                 self, 500, 500,
@@ -56,6 +60,7 @@ class MyGame(arcade.Window):
             )
         )
         self.game_objects[0].face_direction = GameObject.FACING_LEFT
+        """
 
         if joysticks:
             for i in range(len(joysticks)):
@@ -76,6 +81,54 @@ class MyGame(arcade.Window):
         # and set them to None
 
     def setup(self):
+        self.towers.append(
+            Tower(self, 600, 600, [
+                {
+                    "idle": {
+                        "file_names": ["resources/tutorial/images/enemies/frog.png",
+                                       "resources/tutorial/images/enemies/frog_move.png"],
+                        "update_rate": 30
+                    },
+                    "shooting": {
+                        "file_names": ["resources/tutorial/images/enemies/frog.png",
+                                       "resources/tutorial/images/enemies/frog_move.png"],
+                        "update_rate": 30
+                    },
+                    "destruction": {
+                        "file_names": ["resources/tutorial/images/enemies/frog.png",
+                                       "resources/tutorial/images/enemies/frog_move.png"],
+                        "update_rate": 30
+                    },
+                },{
+                    "idle": {
+                        "file_names": ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
+                        "update_rate": 30
+                    },
+                    "shooting": {
+                        "file_names": ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
+                        "update_rate": 30
+                    },
+                    "destruction": {
+                        "file_names": ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
+                        "update_rate": 30
+                    },
+                },{
+                    "idle": {
+                        "file_names": ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"],
+                        "update_rate": 30
+                    },
+                    "shooting": {
+                        "file_names": ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"],
+                        "update_rate": 30
+                    },
+                    "destruction": {
+                        "file_names": ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"],
+                        "update_rate": 30
+                    },
+                },
+            ])
+        )
+        self.towers[0].upgrade()
         self.map.setup()
         # Create your sprites and sprite lists here
         pass
@@ -91,7 +144,7 @@ class MyGame(arcade.Window):
 
         self.map.draw()
 
-        self.game_objects.draw()
+        self.towers.draw()
 
         self.players.draw()
         # Call draw() on all your sprite lists below
@@ -105,8 +158,8 @@ class MyGame(arcade.Window):
         for player in self.players:
             player.update()
 
-        for game_object in self.game_objects:
-            game_object.update_animation(delta_time)
+        for tower in self.towers:
+            tower.update_animation(delta_time)
 
     def on_key_press(self, key, key_modifiers):
         print(key)
