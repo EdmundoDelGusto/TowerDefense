@@ -1,0 +1,39 @@
+{
+  "name": "Spast",
+  "description": "Ein richtiger Spast der den Leuten voll auf den Sack geht",
+  "level_count": 3,
+  "costs": [80, 150, 300],
+  "attacks": [
+    {
+      "damage": 20,
+      "rate": 10,
+      "type": "normal"
+    }, {
+      "damage": 50,
+      "rate": 10,
+      "type": "normal"
+    }, {
+      "damage": 50,
+      "rate": 7,
+      "type": "normal"
+    }
+  ],
+  "idle_textures": [
+    ["resources/images/enemies/penis_man/pixil-frame-0.png","resources/images/enemies/penis_man/pixil-frame-1.png","resources/images/enemies/penis_man/pixil-frame-2.png","resources/images/enemies/penis_man/pixil-frame-3.png","resources/images/enemies/penis_man/pixil-frame-4.png","resources/images/enemies/penis_man/pixil-frame-5.png","resources/images/enemies/penis_man/pixil-frame-6.png","resources/images/enemies/penis_man/pixil-frame-7.png"],
+    ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
+    ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"]
+  ],
+  "idle_update_rates": [10, 60, 30],
+  "shooting_textures": [
+    ["resources/tutorial/images/enemies/frog.png", "resources/tutorial/images/enemies/frog_move.png"],
+    ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
+    ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"]
+  ],
+  "shooting_update_rates": [30, 30, 30],
+  "destruction_textures": [
+    ["resources/tutorial/images/enemies/frog.png", "resources/tutorial/images/enemies/frog_move.png"],
+    ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
+    ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"]
+  ],
+  "destruction_update_rates": [30, 30, 30]
+}

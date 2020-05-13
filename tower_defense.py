@@ -12,14 +12,17 @@ import arcade
 import numpy as np
 from player import *
 from map import *
+from tower_class import *
 from tower import *
+from loader import *
 from game_object import *
+
 
 import time
 
-SCREEN_WIDTH = 1840         # / 40 = 48
-SCREEN_HEIGHT = 1000        # / 40 = 27
-TILE_SIZE = 40
+SCREEN_WIDTH = 1920         # / 40 = 48
+SCREEN_HEIGHT = 1080        # / 40 = 27
+TILE_SIZE = 60
 SCREEN_TITLE = "Tower Defense"
 
 class MyGame(arcade.Window):
@@ -30,23 +33,22 @@ class MyGame(arcade.Window):
     If you do need a method, delete the 'pass' and replace it
     with your own code. Don't leave 'pass' in this program.
     """
-    FPS = 24
-
     PLAYER_WIDTH = 40
     PLAYER_HEIGHT = 40
-    FPS = 60
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
 
         arcade.set_background_color(arcade.color.AMAZON)
         joysticks = arcade.get_joysticks()
+        self.loader = Loader("game_data.json")
+        self.FPS = self.loader.fps
+
         self.set_update_rate(1 / self.FPS)
         self.player_count = len(joysticks)
         self.players = arcade.SpriteList()
         self.tile_size = TILE_SIZE
-        self.map = Map(self, "level1.lvl")
-
-
+        self.map = Map(self, self.loader.map)
+        self.tower_classes = [TowerClass(self, tower_class_data) for tower_class_data in self.loader.tower_classes]
         self.towers = arcade.SpriteList()
 
         """
@@ -81,54 +83,10 @@ class MyGame(arcade.Window):
         # and set them to None
 
     def setup(self):
-        self.towers.append(
-            Tower(self, 600, 600, [
-                {
-                    "idle": {
-                        "file_names": ["resources/tutorial/images/enemies/frog.png",
-                                       "resources/tutorial/images/enemies/frog_move.png"],
-                        "update_rate": 30
-                    },
-                    "shooting": {
-                        "file_names": ["resources/tutorial/images/enemies/frog.png",
-                                       "resources/tutorial/images/enemies/frog_move.png"],
-                        "update_rate": 30
-                    },
-                    "destruction": {
-                        "file_names": ["resources/tutorial/images/enemies/frog.png",
-                                       "resources/tutorial/images/enemies/frog_move.png"],
-                        "update_rate": 30
-                    },
-                },{
-                    "idle": {
-                        "file_names": ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
-                        "update_rate": 30
-                    },
-                    "shooting": {
-                        "file_names": ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
-                        "update_rate": 30
-                    },
-                    "destruction": {
-                        "file_names": ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
-                        "update_rate": 30
-                    },
-                },{
-                    "idle": {
-                        "file_names": ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"],
-                        "update_rate": 30
-                    },
-                    "shooting": {
-                        "file_names": ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"],
-                        "update_rate": 30
-                    },
-                    "destruction": {
-                        "file_names": ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"],
-                        "update_rate": 30
-                    },
-                },
-            ])
-        )
-        self.towers[0].upgrade()
+        self.towers.append(self.tower_classes[0].create_tower(self.players[0], 0, 600, 600))
+        self.towers.append(self.tower_classes[0].create_tower(self.players[0], 0, 200, 800))
+        self.towers.append(self.tower_classes[0].create_tower(self.players[0], 1, 550, 555))
+        self.towers.append(self.tower_classes[0].create_tower(self.players[0], 1, 331, 222))
         self.map.setup()
         # Create your sprites and sprite lists here
         pass
@@ -162,13 +120,23 @@ class MyGame(arcade.Window):
             tower.update_animation(delta_time)
 
     def on_key_press(self, key, key_modifiers):
-        print(key)
-        """
-        Called whenever a key on the keyboard is pressed.
+        if key == arcade.key.F:
+            # User hits f. Flip between full and not full screen.
+            self.set_fullscreen(not self.fullscreen)
 
-        For a full list of keys, see:
-        http://arcade.academy/arcade.key.html
-        """
+            # Get the window coordinates. Match viewport to window coordinates
+            # so there is a one-to-one mapping.
+            width, height = self.get_size()
+            self.set_viewport(0, width, 0, height)
+
+        if key == arcade.key.S:
+            # User hits s. Flip between full and not full screen.
+            self.set_fullscreen(not self.fullscreen)
+
+            # Instead of a one-to-one mapping, stretch/squash window to match the
+            # constants. This does NOT respect aspect ratio. You'd need to
+            # do a bit of math for that.
+            self.set_viewport(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT)
         pass
 
     def on_key_release(self, key, key_modifiers):

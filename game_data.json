@@ -1,0 +1,14 @@
+{
+  "fps": 60,
+  "map": "level1.lvl",
+  "tower_classes": [
+    {
+      "name": "Irrenanstalt",
+      "info_text": "Die Irrenanstalt ist cool",
+      "towers": [
+        "resources/towers/irrenanstalt_spast.json",
+        "resources/towers/irrenanstalt_apotheker.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "Heino der Hausapotheker",
+  "description": "Dröhnt alle zu",
+  "level_count": 3,
+  "costs": [50, 100, 300],
+  "attacks": [
+    {
+      "damage": 10,
+      "rate": 10,
+      "type": "slow",
+      "slow_factor": 0.5
+    }, {
+      "damage": 50,
+      "rate": 10,
+      "type": "slow",
+      "slow_factor": 0.5
+    }, {
+      "damage": 200,
+      "rate": 30,
+      "type": "slow",
+      "slow_factor": 0.5
+    }
+  ],
+  "idle_textures": [
+    ["resources/images/towers/leckende_peniskanone/pixil-frame-0.png","resources/images/towers/leckende_peniskanone/pixil-frame-1.png","resources/images/towers/leckende_peniskanone/pixil-frame-2.png","resources/images/towers/leckende_peniskanone/pixil-frame-3.png","resources/images/towers/leckende_peniskanone/pixil-frame-4.png","resources/images/towers/leckende_peniskanone/pixil-frame-5.png"],
+    ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
+    ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"]
+  ],
+  "idle_update_rates": [30, 30, 30],
+  "shooting_textures": [
+    ["resources/tutorial/images/enemies/frog.png", "resources/tutorial/images/enemies/frog_move.png"],
+    ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
+    ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"]
+  ],
+  "shooting_update_rates": [30, 30, 30],
+  "destruction_textures": [
+    ["resources/tutorial/images/enemies/frog.png", "resources/tutorial/images/enemies/frog_move.png"],
+    ["resources/tutorial/images/enemies/slimeBlue.png", "resources/tutorial/images/enemies/slimeBlue_move.png"],
+    ["resources/tutorial/images/enemies/wormGreen.png", "resources/tutorial/images/enemies/wormGreen_move.png"]
+  ],
+  "destruction_update_rates": [30, 30, 30]
+}

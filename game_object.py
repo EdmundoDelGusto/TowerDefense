@@ -33,7 +33,7 @@ class GameObject(arcade.Sprite):
         self.face_direction = None
         self.state = None
 
-        self.scale = self.game.tile_size / 128
+        self.scale = 1* self.game.tile_size / 128
 
         self.frame_count_texture = 0
 
@@ -43,10 +43,8 @@ class GameObject(arcade.Sprite):
         self.validate()
 
         self.frame_count_texture += 1
-
         if self.frame_count_texture // self.update_rates[self.state] > (len(self.textures[self.state]) - 1):
             self.frame_count_texture = 0
-        #print(self.textures[self.state])
         self.texture = self.textures[self.state][self.frame_count_texture // self.update_rates[self.state]][self.face_direction]
 
     def load_texture_pair(self, file_name, name=""):
