@@ -33,7 +33,7 @@ class GameObject(arcade.Sprite):
         self.face_direction = None
         self.state = None
 
-        self.scale = 1* self.game.tile_size / 128
+        self.scale = 1 * self.game.tile_size / 128
 
         self.frame_count_texture = 0
 

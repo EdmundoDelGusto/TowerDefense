@@ -22,7 +22,7 @@ import time
 
 SCREEN_WIDTH = 1920         # / 40 = 48
 SCREEN_HEIGHT = 1080        # / 40 = 27
-TILE_SIZE = 60
+TILE_SIZE = 30
 SCREEN_TITLE = "Tower Defense"
 
 class MyGame(arcade.Window):
